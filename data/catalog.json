@@ -1,0 +1,932 @@
+{
+  "npcs": [
+    {
+      "name": "阿加莎",
+      "role": "修女",
+      "tasks": [
+        {
+          "label": "任务1",
+          "items": [
+            {
+              "name": "木制套件I",
+              "qty": 2
+            },
+            {
+              "name": "石制套件",
+              "qty": 2
+            }
+          ]
+        },
+        {
+          "label": "任务2",
+          "items": [
+            {
+              "name": "家具套件I",
+              "qty": 2
+            },
+            {
+              "name": "建筑套件I",
+              "qty": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "艾伯特",
+      "role": "瘟疫医生",
+      "tasks": [
+        {
+          "label": "任务1",
+          "items": [
+            {
+              "name": "空白平装笔记本",
+              "qty": 1
+            }
+          ]
+        },
+        {
+          "label": "任务2",
+          "items": [
+            {
+              "name": "巧克力",
+              "qty": 3
+            },
+            {
+              "name": "炼金烧瓶II",
+              "qty": 10
+            }
+          ]
+        },
+        {
+          "label": "任务3",
+          "items": [
+            {
+              "name": "奢华窗帘",
+              "qty": 20
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "匕首戴维",
+      "role": "劫掠者的头目",
+      "tasks": []
+    },
+    {
+      "name": "甘特",
+      "role": "占星家；后来是你的公关经理",
+      "tasks": [
+        {
+          "label": "任务1",
+          "items": [
+            {
+              "name": "印刷的诗歌",
+              "qty": 1
+            }
+          ]
+        },
+        {
+          "label": "任务2",
+          "items": [
+            {
+              "name": "小型印刷机",
+              "qty": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "古神",
+      "role": "远古神明",
+      "tasks": []
+    },
+    {
+      "name": "哈罗德",
+      "role": "木雕大师",
+      "tasks": [
+        {
+          "label": "任务1",
+          "items": [
+            {
+              "name": "建筑套件I",
+              "qty": 2
+            },
+            {
+              "name": "铁制套件II",
+              "qty": 1
+            }
+          ]
+        },
+        {
+          "label": "任务2",
+          "items": [
+            {
+              "name": "特殊木材",
+              "qty": 4
+            },
+            {
+              "name": "钢细节",
+              "qty": 6
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "赫伯特",
+      "role": "卫队长",
+      "tasks": [
+        {
+          "label": "任务1",
+          "items": [
+            {
+              "name": "魔法铃铛",
+              "qty": 1
+            }
+          ]
+        },
+        {
+          "label": "任务2",
+          "items": [
+            {
+              "name": "钢护甲",
+              "qty": 5
+            }
+          ]
+        },
+        {
+          "label": "任务3",
+          "items": [
+            {
+              "name": "三部曲",
+              "qty": 1
+            },
+            {
+              "name": "演讲稿写作工具",
+              "qty": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "赫弗里和杰弗里",
+      "role": "村里的一对双胞胎兄弟",
+      "tasks": [
+        {
+          "label": "任务1",
+          "items": [
+            {
+              "name": "黏土盘",
+              "qty": 6
+            }
+          ]
+        },
+        {
+          "label": "任务2",
+          "items": [
+            {
+              "name": "亚麻线",
+              "qty": 3
+            }
+          ]
+        },
+        {
+          "label": "任务3",
+          "items": [
+            {
+              "name": "印制钞票",
+              "qty": 20
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "赫姆",
+      "role": "商人",
+      "tasks": [
+        {
+          "label": "任务1",
+          "items": [
+            {
+              "name": "蕾丝",
+              "qty": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "魂灵",
+      "role": "精灵；自然女神的侍从",
+      "tasks": []
+    },
+    {
+      "name": "杰克",
+      "role": "工坊工头",
+      "tasks": [
+        {
+          "label": "任务1",
+          "items": [
+            {
+              "name": "木板",
+              "qty": 5
+            }
+          ]
+        },
+        {
+          "label": "任务2",
+          "items": [
+            {
+              "name": "青铜零件",
+              "qty": 5
+            }
+          ]
+        },
+        {
+          "label": "任务3",
+          "items": [
+            {
+              "name": "补给：铁",
+              "qty": 1
+            }
+          ]
+        },
+        {
+          "label": "任务4",
+          "items": [
+            {
+              "name": "建筑套件I",
+              "qty": 5
+            },
+            {
+              "name": "木制套件I",
+              "qty": 5
+            }
+          ]
+        },
+        {
+          "label": "任务5",
+          "items": [
+            {
+              "name": "钢锭",
+              "qty": 3
+            }
+          ]
+        },
+        {
+          "label": "任务6",
+          "items": [
+            {
+              "name": "假手",
+              "qty": 1
+            }
+          ]
+        },
+        {
+          "label": "任务7",
+          "items": [
+            {
+              "name": "优雅假手",
+              "qty": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "拉里",
+      "role": "会说话的骷髅头，你的同伴",
+      "tasks": [
+        {
+          "label": "任务1",
+          "items": [
+            {
+              "name": "简易蜡烛",
+              "qty": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "琳达",
+      "role": "码头俱乐部老板",
+      "tasks": [
+        {
+          "label": "任务1",
+          "items": [
+            {
+              "name": "颜料",
+              "qty": 1
+            }
+          ]
+        },
+        {
+          "label": "任务2",
+          "items": [
+            {
+              "name": "简易香",
+              "qty": 1
+            }
+          ]
+        },
+        {
+          "label": "任务3",
+          "items": [
+            {
+              "name": "空白平装笔记本",
+              "qty": 1
+            }
+          ]
+        },
+        {
+          "label": "任务4",
+          "items": [
+            {
+              "name": "巧克力",
+              "qty": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "毛驴",
+      "role": "送尸体",
+      "tasks": []
+    },
+    {
+      "name": "贸易大师",
+      "role": "负责小镇仓库和港口贸易的管理员",
+      "tasks": [
+        {
+          "label": "任务1",
+          "items": [
+            {
+              "name": "透镜",
+              "qty": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "修士主教",
+      "role": "皇家铸造厂的修士领头人",
+      "tasks": [
+        {
+          "label": "任务1",
+          "items": [
+            {
+              "name": "僵尸之力",
+              "qty": 3
+            }
+          ]
+        },
+        {
+          "label": "任务2",
+          "items": [
+            {
+              "name": "葡萄酒★★★",
+              "qty": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "雅努乌斯",
+      "role": "酒馆老板；化身朱利时是村长",
+      "tasks": [
+        {
+          "label": "任务3",
+          "items": [
+            {
+              "name": "印制钞票",
+              "qty": 20
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Merc Leader",
+      "role": "雇佣兵的首领",
+      "tasks": []
+    }
+  ],
+  "maps": [
+    {
+      "name": "你的家和院子",
+      "place": "审判官营地，十字路口以西"
+    },
+    {
+      "name": "墓地",
+      "place": "你家以东，旧神庙（教堂）前面"
+    },
+    {
+      "name": "太平间",
+      "place": "你家和墓地之间"
+    },
+    {
+      "name": "教堂",
+      "place": "墓地里那座古老的神殿；门在墓地那一侧"
+    },
+    {
+      "name": "营房",
+      "place": "小镇里，十字路口东边"
+    },
+    {
+      "name": "村庄与十字路口",
+      "place": "你家往东；村庄在十字路口南边"
+    },
+    {
+      "name": "地牢与废弃塔楼",
+      "place": "你家地下，以及旁边那座塔"
+    },
+    {
+      "name": "复活实验室",
+      "place": "太平间后面那扇旧门后"
+    },
+    {
+      "name": "采石场",
+      "place": "你家院子正南边，森林开始的地方"
+    },
+    {
+      "name": "河畔",
+      "place": "你家院子西南边，采石场以西"
+    },
+    {
+      "name": "工厂",
+      "place": "在你家下面，地下室南墙后边"
+    },
+    {
+      "name": "葡萄园（区域）",
+      "place": "你家往西，过一座坏桥"
+    },
+    {
+      "name": "老矿场",
+      "place": "森林地下；从采石场的洞穴或从工厂都能进去"
+    },
+    {
+      "name": "锯木厂",
+      "place": "在森林里，采石场西南方"
+    },
+    {
+      "name": "森林",
+      "place": "村庄以西，过了守卫哨所"
+    },
+    {
+      "name": "沼泽",
+      "place": "森林南边，过了强盗把守的桥"
+    },
+    {
+      "name": "港口",
+      "place": "桥对面靠海的那片小镇区域"
+    },
+    {
+      "name": "北岸",
+      "place": "小镇被僵尸占据的部分，隔河与港口和南区相望"
+    }
+  ],
+  "stations": [
+    "厨房I",
+    "厨房II",
+    "厨房烤箱",
+    "厨房烤箱II",
+    "厨房台面II",
+    "堆肥堆",
+    "堆肥堆II",
+    "发酵桶",
+    "伐木工摊位",
+    "纺车",
+    "缝纫台",
+    "木砧",
+    "铁砧",
+    "钢砧",
+    "火葬场I",
+    "火葬场II",
+    "僵尸大理石采石场",
+    "僵尸矿工（需要打通矿场的两条入口）",
+    "僵尸石材采石场",
+    "酒桶",
+    "锯木架",
+    "磨石",
+    "木工工作台I",
+    "木工工作台II",
+    "配制台",
+    "劈柴桩",
+    "葡萄压榨机",
+    "熔炉I",
+    "熔炉II",
+    "生物反应器",
+    "石匠工作台",
+    "书桌",
+    "陶轮",
+    "铁匠铺I",
+    "铁匠铺II",
+    "洗矿槽",
+    "窑炉",
+    "印刷机",
+    "圆锯",
+    "造纸机",
+    "蒸馏立方体",
+    "织布机",
+    "珠宝台",
+    "装配台I",
+    "装配台II",
+    "装配台III"
+  ],
+  "orders": [
+    {
+      "name": "补给：铁",
+      "qty": 1,
+      "urgent": false
+    },
+    {
+      "name": "补给：布料",
+      "qty": 5,
+      "urgent": false
+    },
+    {
+      "name": "补给：建筑材料I",
+      "qty": 5,
+      "urgent": false
+    },
+    {
+      "name": "补给：铁",
+      "qty": 5,
+      "urgent": false
+    },
+    {
+      "name": "补给：餐具I",
+      "qty": 10,
+      "urgent": true
+    },
+    {
+      "name": "补给：餐具I",
+      "qty": 5,
+      "urgent": false
+    },
+    {
+      "name": "补给：餐具I",
+      "qty": 5,
+      "urgent": false
+    },
+    {
+      "name": "补给：厨房用具",
+      "qty": 20,
+      "urgent": true
+    },
+    {
+      "name": "补给：厨房用具",
+      "qty": 20,
+      "urgent": true
+    },
+    {
+      "name": "补给：餐具II",
+      "qty": 30,
+      "urgent": true
+    },
+    {
+      "name": "补给：餐具II",
+      "qty": 30,
+      "urgent": false
+    },
+    {
+      "name": "补给：蔬菜",
+      "qty": 10,
+      "urgent": true
+    },
+    {
+      "name": "补给：蔬菜",
+      "qty": 10,
+      "urgent": false
+    },
+    {
+      "name": "补给：泡菜I",
+      "qty": 20,
+      "urgent": true
+    },
+    {
+      "name": "补给：泡菜I",
+      "qty": 20,
+      "urgent": false
+    },
+    {
+      "name": "补给：泡菜II",
+      "qty": 30,
+      "urgent": true
+    },
+    {
+      "name": "补给：泡菜II",
+      "qty": 30,
+      "urgent": false
+    },
+    {
+      "name": "补给：布料",
+      "qty": 10,
+      "urgent": true
+    },
+    {
+      "name": "补给：布料",
+      "qty": 10,
+      "urgent": false
+    },
+    {
+      "name": "补给：衣服I",
+      "qty": 20,
+      "urgent": true
+    },
+    {
+      "name": "补给：衣服I",
+      "qty": 20,
+      "urgent": false
+    },
+    {
+      "name": "补给：衣服II",
+      "qty": 30,
+      "urgent": true
+    },
+    {
+      "name": "补给：衣服II",
+      "qty": 30,
+      "urgent": false
+    },
+    {
+      "name": "补给：家具I",
+      "qty": 10,
+      "urgent": true
+    },
+    {
+      "name": "补给：家具II",
+      "qty": 20,
+      "urgent": true
+    },
+    {
+      "name": "补给：家用器具I",
+      "qty": 30,
+      "urgent": true
+    },
+    {
+      "name": "补给：家具I",
+      "qty": 10,
+      "urgent": false
+    },
+    {
+      "name": "补给：家具II",
+      "qty": 20,
+      "urgent": false
+    },
+    {
+      "name": "补给：家用器具I",
+      "qty": 30,
+      "urgent": false
+    },
+    {
+      "name": "补给：面粉袋",
+      "qty": 10,
+      "urgent": true
+    },
+    {
+      "name": "补给：铁制工具",
+      "qty": 20,
+      "urgent": true
+    },
+    {
+      "name": "补给：家用器具I",
+      "qty": 30,
+      "urgent": true
+    },
+    {
+      "name": "补给：面粉袋",
+      "qty": 10,
+      "urgent": false
+    },
+    {
+      "name": "补给：铁制工具",
+      "qty": 20,
+      "urgent": false
+    },
+    {
+      "name": "补给：家用器具I",
+      "qty": 30,
+      "urgent": false
+    },
+    {
+      "name": "补给：泡菜I",
+      "qty": 10,
+      "urgent": true
+    },
+    {
+      "name": "补给：铁制工具",
+      "qty": 20,
+      "urgent": true
+    },
+    {
+      "name": "补给：衣服I",
+      "qty": 30,
+      "urgent": true
+    },
+    {
+      "name": "补给：泡菜I",
+      "qty": 10,
+      "urgent": false
+    },
+    {
+      "name": "补给：铁制工具",
+      "qty": 20,
+      "urgent": false
+    },
+    {
+      "name": "补给：衣服I",
+      "qty": 30,
+      "urgent": false
+    },
+    {
+      "name": "补给：厨房用具",
+      "qty": 10,
+      "urgent": true
+    },
+    {
+      "name": "补给：工程装置",
+      "qty": 20,
+      "urgent": true
+    },
+    {
+      "name": "补给：家用器具II",
+      "qty": 30,
+      "urgent": true
+    },
+    {
+      "name": "补给：厨房用具",
+      "qty": 10,
+      "urgent": false
+    },
+    {
+      "name": "补给：工程装置",
+      "qty": 20,
+      "urgent": false
+    },
+    {
+      "name": "补给：家用器具II",
+      "qty": 30,
+      "urgent": false
+    },
+    {
+      "name": "补给：铁制工具",
+      "qty": 10,
+      "urgent": true
+    },
+    {
+      "name": "补给：钢制工具",
+      "qty": 20,
+      "urgent": true
+    },
+    {
+      "name": "补给：工程装置",
+      "qty": 30,
+      "urgent": true
+    },
+    {
+      "name": "补给：铁制工具",
+      "qty": 10,
+      "urgent": false
+    },
+    {
+      "name": "补给：钢制工具",
+      "qty": 20,
+      "urgent": false
+    },
+    {
+      "name": "补给：工程装置",
+      "qty": 30,
+      "urgent": false
+    },
+    {
+      "name": "补给：铁制工具",
+      "qty": 10,
+      "urgent": true
+    },
+    {
+      "name": "补给：钢制工具",
+      "qty": 20,
+      "urgent": true
+    },
+    {
+      "name": "补给：工程装置",
+      "qty": 30,
+      "urgent": true
+    },
+    {
+      "name": "补给：铁制工具",
+      "qty": 10,
+      "urgent": false
+    },
+    {
+      "name": "补给：钢制工具",
+      "qty": 20,
+      "urgent": false
+    },
+    {
+      "name": "补给：工程装置",
+      "qty": 30,
+      "urgent": false
+    },
+    {
+      "name": "补给：建筑材料I",
+      "qty": 10,
+      "urgent": true
+    },
+    {
+      "name": "补给：建筑材料II",
+      "qty": 20,
+      "urgent": true
+    },
+    {
+      "name": "补给：工程装置",
+      "qty": 30,
+      "urgent": true
+    },
+    {
+      "name": "补给：建筑材料I",
+      "qty": 10,
+      "urgent": false
+    },
+    {
+      "name": "补给：建筑材料II",
+      "qty": 20,
+      "urgent": false
+    },
+    {
+      "name": "补给：工程装置",
+      "qty": 30,
+      "urgent": false
+    },
+    {
+      "name": "补给：泡菜I",
+      "qty": 10,
+      "urgent": true
+    },
+    {
+      "name": "补给：啤酒",
+      "qty": 20,
+      "urgent": true
+    },
+    {
+      "name": "补给：葡萄酒",
+      "qty": 30,
+      "urgent": true
+    },
+    {
+      "name": "补给：泡菜I",
+      "qty": 10,
+      "urgent": false
+    },
+    {
+      "name": "补给：啤酒",
+      "qty": 20,
+      "urgent": false
+    },
+    {
+      "name": "补给：葡萄酒",
+      "qty": 30,
+      "urgent": false
+    },
+    {
+      "name": "补给：厨房用具",
+      "qty": 10,
+      "urgent": true
+    },
+    {
+      "name": "补给：餐具II",
+      "qty": 20,
+      "urgent": true
+    },
+    {
+      "name": "补给：家用器具II",
+      "qty": 30,
+      "urgent": true
+    },
+    {
+      "name": "补给：厨房用具",
+      "qty": 10,
+      "urgent": false
+    },
+    {
+      "name": "补给：餐具II",
+      "qty": 20,
+      "urgent": false
+    },
+    {
+      "name": "补给：家用器具II",
+      "qty": 30,
+      "urgent": false
+    }
+  ]
+}

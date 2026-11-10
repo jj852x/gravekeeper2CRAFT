@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>守墓人 2 制作清单</title>
+  <link rel="preload" href="fonts/SumrSans.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="fonts/stylesheet.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="top">
+    <div>
+      <h1>守墓人 2 制作清单</h1>
+    </div>
+    <div class="top-actions">
+      <label>分类 <select id="import-category"></select></label>
+      <label class="file-btn">
+        csv文件导入
+        <input id="csv-file" type="file" accept=".csv,text/csv">
+      </label>
+      <button id="export-library" class="ghost" type="button">导出配方库</button>
+      <label class="file-btn ghost">
+        导入配方库
+        <input id="library-file" type="file" accept=".json,application/json">
+      </label>
+      <button id="import-default-library" class="ghost" type="button">导入默认配方</button>
+    </div>
+  </header>
+  <p id="toast" class="toast" hidden></p>
+  <div class="layout">
+    <section class="panel" id="task-panel"></section>
+    <section class="panel" id="tree-panel"></section>
+    <section class="panel" id="stock-panel"></section>
+  </div>
+  <section class="panel recipes" id="hero-panel"></section>
+  <section class="panel recipes" id="recipe-panel"></section>
+  <dialog id="default-library-dialog">
+    <form method="dialog">
+      <p>该操作会覆盖所有现有配方，请确认是否继续。</p>
+      <div class="dialog-actions">
+        <button value="yes" type="submit">Yes</button>
+        <button value="no" type="submit">No</button>
+      </div>
+    </form>
+  </dialog>
+  <dialog id="confirm-dialog">
+    <form method="dialog">
+      <h2>确认完成</h2>
+      <p id="confirm-text"></p>
+      <div class="dialog-actions">
+        <button value="keep" type="submit">不改库存</button>
+        <button value="deduct" type="submit">扣掉本单占用的库存</button>
+        <button value="cancel" type="submit">取消</button>
+      </div>
+    </form>
+  </dialog>
+  <script>
+    window.addEventListener("error", function (event) {
+      var toast = document.querySelector("#toast");
+      if (!toast) return;
+      toast.hidden = false;
+      toast.textContent = "页面没有打开。";
+    });
+  </script>
+  <script src="catalog.js" charset="utf-8"></script>
+  <script src="calc.js" charset="utf-8"></script>
+  <script src="store.js" charset="utf-8"></script>
+  <script src="app.js" charset="utf-8"></script>
+</body>
+</html>
