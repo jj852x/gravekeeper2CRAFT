@@ -689,6 +689,7 @@ function renderStock() {
 
 function inputLabel(recipe, input, index) {
   const qty = effectiveInputQty(recipe, index, state.heroOwned);
+  if (input.fixed && qty === 1) return escapeHtml(input.name);
   return `${escapeHtml(input.name)} × ${qty}`;
 }
 

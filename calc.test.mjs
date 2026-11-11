@@ -51,6 +51,27 @@ assert.equal(JSON.stringify(rows[0]), JSON.stringify({
 assert.equal(rows[1].mastery, 5);
 assert.equal("tech" in rows[0], false);
 
+const buildingText = `产出,原料1,原料2,原料3
+搬运站（补给仓库）×1,铁钉×8,高级零件×2,抛光的石材×4
+"搬运站（葡萄园, 采石场）×1",石块×2,砖块×4,
+杜鹃花丛×1,杜鹃花幼苗×1,,
+`;
+const buildings = parseStationCsv(buildingText, "建筑1");
+assert.equal(buildings.length, 3);
+assert.equal(buildings[0].outputName, "搬运站（补给仓库）");
+assert.equal(buildings[0].outputQty, 1);
+assert.equal(JSON.stringify(buildings[0].inputs), JSON.stringify([
+  { name: "铁钉", qty: 8 },
+  { name: "高级零件", qty: 2 },
+  { name: "抛光的石材", qty: 4 },
+]));
+assert.equal(buildings[0].mastery, null);
+assert.equal(buildings[0].time, null);
+assert.equal(buildings[0].station, "建筑1");
+assert.equal(buildings[1].outputName, "搬运站（葡萄园, 采石场）");
+assert.equal(buildings[1].inputs.length, 2);
+assert.equal(JSON.stringify(buildings[2].inputs), JSON.stringify([{ name: "杜鹃花幼苗", qty: 1 }]));
+
 const first = mergeRecipes([], rows);
 assert.equal(first.added, 4);
 const second = mergeRecipes(first.recipes.map((row, index) => ({ ...row, id: index, enabled: index !== 1 })), rows);
@@ -72,8 +93,8 @@ const planned = expandTasks(state, [
   { id: "low", outputName: "奢华窗帘", qty: 1, recipeId: "b", priority: 0, createdAt: 2 },
   { id: "high", outputName: "蕾丝", qty: 6, recipeId: "a", priority: 5, createdAt: 1 },
 ]);
-const high = planned.find((row) => row.taskId === "high").tree;
-const low = planned.find((row) => row.taskId === "low").tree;
+const high = planned.find((row) => row.taskId === "high").trees[0];
+const low = planned.find((row) => row.taskId === "low").trees[0];
 assert.equal(high.have, 4);
 assert.equal(high.short, 2);
 assert.equal(high.children[0].name, "亚麻线");
@@ -89,8 +110,7 @@ assert.equal(low.depth, 2);
 const blocked = expandTasks(state, [
   { id: "rug", outputName: "地毯", qty: 1, recipeId: "c", priority: 0, createdAt: 1 },
 ]);
-assert.equal(blocked[0].tree.blocked, true);
-assert.equal(blocked[0].tree.children.length, 0);
+assert.equal(blocked[0].trees.length, 0);
 
 const batchState = {
   items: {},
@@ -100,8 +120,8 @@ const batchState = {
 const pies = expandTasks(batchState, [
   { id: "p", outputName: "浆果派", qty: 5, recipeId: "pie", priority: 0, createdAt: 1 },
 ]);
-assert.equal(pies[0].tree.batches, 2);
-assert.equal(pies[0].tree.children[0].gross, 12);
+assert.equal(pies[0].trees[0].batches, 2);
+assert.equal(pies[0].trees[0].children[0].gross, 12);
 
 assert.equal(parseCount("", 1, 4), 4);
 assert.equal(parseCount("0", 1, 4), 4);
@@ -137,14 +157,14 @@ const threadState = {
 const plain = expandTasks(threadState, [
   { id: "y", outputName: "亚麻线", qty: 6, recipeId: "yarn", priority: 0, createdAt: 1 },
 ]);
-assert.equal(plain[0].tree.batches, 2);
-assert.equal(plain[0].tree.children[0].gross, 8);
+assert.equal(plain[0].trees[0].batches, 2);
+assert.equal(plain[0].trees[0].children[0].gross, 8);
 threadState.recipes[0].zombie = true;
 const boosted = expandTasks(threadState, [
   { id: "y", outputName: "亚麻线", qty: 6, recipeId: "yarn", priority: 0, createdAt: 1 },
 ]);
-assert.equal(boosted[0].tree.batches, 1);
-assert.equal(boosted[0].tree.children[0].gross, 4);
+assert.equal(boosted[0].trees[0].batches, 1);
+assert.equal(boosted[0].trees[0].children[0].gross, 4);
 
 const ovenText = `原料,产出,精通,耗时,科技点
 面团×4,浆果派× 4 ( 厨师 +2 ),4,6,1
@@ -241,16 +261,44 @@ assert.equal(effectiveInputQty(pie, 2, ["节能达人"]), 10);
 const cold = expandTasks({ items: {}, recipes: [pie], stock: {}, heroOwned: [] }, [
   { id: "p", outputName: "浆果派", qty: 4, recipeId: "pie", priority: 0, createdAt: 1 },
 ]);
-assert.equal(cold[0].tree.batches, 1);
-assert.equal(cold[0].tree.children[2].gross, 20);
+assert.equal(cold[0].trees[0].batches, 1);
+assert.equal(cold[0].trees[0].children[2].gross, 20);
 const hot = expandTasks({ items: {}, recipes: [pie], stock: {}, heroOwned: ["厨师", "节能达人"] }, [
   { id: "p", outputName: "浆果派", qty: 4, recipeId: "pie", priority: 0, createdAt: 1 },
 ]);
-assert.equal(hot[0].tree.batches, 1);
-assert.equal(hot[0].tree.children[2].gross, 10);
+assert.equal(hot[0].trees[0].batches, 1);
+assert.equal(hot[0].trees[0].children[2].gross, 10);
 const more = expandTasks({ items: {}, recipes: [pie], stock: {}, heroOwned: ["厨师"] }, [
   { id: "p", outputName: "浆果派", qty: 5, recipeId: "pie", priority: 0, createdAt: 1 },
 ]);
-assert.equal(more[0].tree.batches, 1);
+assert.equal(more[0].trees[0].batches, 1);
+
+const minerText = `原料,产出,精通,耗时,科技点
+矿工站,铁矿石×1,1,8,1
+,煤×2,,,
+,宝石×1几率 喜鹊之眼 +0.1,,,
+`;
+const miner = parseStationCsv(minerText, "僵尸矿工（需要打通矿场的两条入口）");
+assert.equal(miner.length, 3);
+assert.equal(miner[0].inputs[0].name, "矿工站");
+assert.equal(miner[0].inputs[0].fixed, true);
+assert.equal(miner[0].outputName, "铁矿石");
+assert.equal(miner[1].outputName, "煤");
+assert.equal(miner[1].outputQty, 2);
+assert.equal(miner[1].inputs[0].fixed, true);
+assert.equal(miner[1].mastery, 1);
+assert.equal(miner[2].outputName, "宝石");
+assert.equal(miner[2].chance, "喜鹊之眼 +0.1");
+const mined = expandTasks({
+  items: {},
+  recipes: miner.map((row, index) => ({ ...row, id: "m" + index, enabled: true })),
+  stock: {},
+  heroOwned: [],
+}, [
+  { id: "ore", outputName: "铁矿石", qty: 10, priority: 0, createdAt: 1 },
+]);
+assert.equal(mined[0].trees[0].batches, 10);
+assert.equal(mined[0].trees[0].children[0].name, "矿工站");
+assert.equal(mined[0].trees[0].children[0].gross, 1);
 
 console.log("calc ok");

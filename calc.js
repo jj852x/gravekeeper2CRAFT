@@ -46,7 +46,7 @@ function parseOneQty(part) {
   const qtyMatch = body.match(/^(.*?)[×xX]\s*(\d+)\s*$/);
   const row = qtyMatch
     ? { name: qtyMatch[1].trim(), qty: Number(qtyMatch[2]) }
-    : { name: body, qty: 1 };
+    : { name: body, qty: 1, fixed: true };
   if (mods.length) row.mods = mods;
   return row;
 }
@@ -135,12 +135,24 @@ function stationFromFilename(filename) {
 function parseStationCsv(text, stationName) {
   const lines = String(text).replace(/^\uFEFF/, "").split(/\r?\n/);
   let header = -1;
+  let mode = "station";
   const rows = [];
   for (let i = 0; i < lines.length; i++) {
     if (!lines[i].trim()) continue;
     const cells = splitCsvLine(lines[i]);
     if (header < 0) {
-      if (cells[0] === "原料") header = i;
+      if (cells[0] === "原料") {
+        header = i;
+        mode = "station";
+      } else if (cells[0] === "产出") {
+        header = i;
+        mode = "building";
+      }
+      continue;
+    }
+    if (mode === "building") {
+      const built = recipeFromCells(stationName, buildingInputs(cells), parseQtyCell(cells[0] || ""), null, null);
+      if (built) rows.push(built);
       continue;
     }
     const chance = chanceLine(cells[1]);
@@ -151,7 +163,23 @@ function parseStationCsv(text, stationName) {
       continue;
     }
     const inputs = parseQtyCell(cells[0]);
-    const outputs = parseQtyCell(cells[1] || "");
+    const outputs = chance
+      ? [{ name: chance.name, qty: chance.qty }]
+      : parseQtyCell(cells[1] || "");
+    if (!inputs.length && outputs.length && previous) {
+      const built = recipeFromCells(
+        stationName,
+        previous.inputs.map((input) => ({ ...input })),
+        outputs,
+        intOrNull(cells[2]) ?? previous.mastery,
+        intOrNull(cells[3]) ?? previous.time,
+      );
+      if (built) {
+        if (chance) built.chance = chance.note;
+        rows.push(built);
+      }
+      continue;
+    }
     if (!outputs.length) {
       const current = rows[rows.length - 1];
       const expansion = expansionNote(cells[0]);
@@ -163,44 +191,62 @@ function parseStationCsv(text, stationName) {
       continue;
     }
     if (!inputs.length) continue;
-    const row = {
-      station: stationName,
-      inputs: [],
-      outputName: outputs[0].name,
-      outputQty: outputs[0].qty,
-      mastery: intOrNull(cells[2]),
-      time: intOrNull(cells[3]),
-      enabled: true,
-      heroMods: [],
-      bonuses: [],
-    };
-    inputs.forEach((input, index) => {
-      row.inputs.push({ name: input.name, qty: input.qty });
-      for (const mod of input.mods || []) pushMod(row, mod, "input", index);
-    });
-    for (const mod of outputs[0].mods || []) pushMod(row, mod, "output");
-    if (!row.heroMods.length) delete row.heroMods;
-    if (!row.bonuses.length) delete row.bonuses;
-    rows.push(row);
+    const built = recipeFromCells(stationName, inputs, outputs, intOrNull(cells[2]), intOrNull(cells[3]));
+    if (built) rows.push(built);
   }
   if (header < 0) {
-    throw new Error("找不到表头「原料,产出,精通,耗时,科技点」");
+    throw new Error("找不到表头「原料,产出,精通,耗时,科技点」或「产出,原料1,原料2,原料3」");
   }
   return rows;
+}
+
+function buildingInputs(cells) {
+  const inputs = [];
+  for (let i = 1; i < cells.length; i++) inputs.push(...parseQtyCell(cells[i]));
+  return inputs;
+}
+
+function recipeFromCells(stationName, inputs, outputs, mastery, time) {
+  if (!outputs.length || !inputs.length) return null;
+  const row = {
+    station: stationName,
+    inputs: [],
+    outputName: outputs[0].name,
+    outputQty: outputs[0].qty,
+    mastery,
+    time,
+    enabled: true,
+    heroMods: [],
+    bonuses: [],
+  };
+  inputs.forEach((input, index) => {
+    row.inputs.push(storedInput(input));
+    for (const mod of input.mods || []) pushMod(row, mod, "input", index);
+  });
+  for (const mod of outputs[0].mods || []) pushMod(row, mod, "output");
+  if (!row.heroMods.length) delete row.heroMods;
+  if (!row.bonuses.length) delete row.bonuses;
+  return row;
+}
+
+function storedInput(input) {
+  const row = { name: input.name, qty: input.qty };
+  if (input.fixed) row.fixed = true;
+  return row;
 }
 
 function appendInputs(row, inputs) {
   for (const input of inputs) {
     const index = row.inputs.length;
-    row.inputs.push({ name: input.name, qty: input.qty });
+    row.inputs.push(storedInput(input));
     for (const mod of input.mods || []) pushMod(row, mod, "input", index);
   }
 }
 
 function chanceLine(text) {
-  const match = String(text || "").trim().match(/^(.+?)[×xX]\s*\d+\s*几率\s*(.+)$/);
+  const match = String(text || "").trim().match(/^(.+?)[×xX]\s*(\d+)\s*几率\s*(.+)$/);
   if (!match) return null;
-  return { name: match[1].trim(), note: match[2].trim() };
+  return { name: match[1].trim(), qty: Number(match[2]), note: match[3].trim() };
 }
 
 function expansionNote(text) {
@@ -285,9 +331,11 @@ function expand(state, name, qtyNeeded, forcedRecipe, stock, stack) {
   const batches = Math.ceil(remaining / yieldQty);
   const produced = batches * yieldQty;
   stock[name] = (stock[name] || 0) + (produced - remaining);
-  const children = recipe.inputs.map((input, index) =>
-    expand(state, input.name, effectiveInputQty(recipe, index, owned) * batches, null, stock, stack)
-  );
+  const children = recipe.inputs.map((input, index) => {
+    const each = effectiveInputQty(recipe, index, owned);
+    const need = input.fixed ? each : each * batches;
+    return expand(state, input.name, need, null, stock, stack);
+  });
   stack.delete(name);
   const depth = 1 + children.reduce((max, child) => Math.max(max, child.depth), 0);
   return {

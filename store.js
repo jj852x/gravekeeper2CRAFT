@@ -118,7 +118,11 @@ function exportLibrary(state) {
       .filter((recipe) => recipe.station === station.name)
       .map((recipe) => ({
         id: recipe.id,
-        inputs: recipe.inputs.map((input) => ({ name: input.name, qty: input.qty })),
+        inputs: recipe.inputs.map((input) => {
+          const row = { name: input.name, qty: input.qty };
+          if (input.fixed) row.fixed = true;
+          return row;
+        }),
         outputName: recipe.outputName,
         outputQty: recipe.outputQty,
         bonuses: recipe.bonuses || [],
@@ -149,7 +153,11 @@ function applyLibrary(state, library) {
       state.recipes.push({
         id,
         station: station.name,
-        inputs: (recipe.inputs || []).map((input) => ({ name: input.name, qty: input.qty })),
+        inputs: (recipe.inputs || []).map((input) => {
+          const row = { name: input.name, qty: input.qty };
+          if (input.fixed) row.fixed = true;
+          return row;
+        }),
         outputName: recipe.outputName,
         outputQty: recipe.outputQty,
         bonuses: recipe.bonuses || [],
