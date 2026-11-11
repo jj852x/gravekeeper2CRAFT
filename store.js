@@ -73,6 +73,7 @@ function applyImportedRecipes(state, incoming, category) {
   let updated = 0;
   for (const row of incoming) {
     ensureItem(state, row.outputName);
+    (row.byproducts || []).forEach((item) => ensureItem(state, item.name));
     row.inputs.forEach((input) => ensureItem(state, input.name));
     touchStation(state, row.station, category || "工作台");
     const key = GK2Calc.recipeKey(row);
@@ -84,6 +85,7 @@ function applyImportedRecipes(state, incoming, category) {
         inputs: row.inputs.map((input) => ({ ...input })),
         outputName: row.outputName,
         outputQty: row.outputQty,
+        byproducts: (row.byproducts || []).map((item) => ({ ...item })),
         bonuses: (row.bonuses || []).map((bonus) => ({ ...bonus })),
         heroMods: (row.heroMods || []).map((mod) => ({ ...mod })),
         expansion: row.expansion || "",
@@ -97,6 +99,7 @@ function applyImportedRecipes(state, incoming, category) {
     }
     found.inputs = row.inputs.map((input) => ({ ...input }));
     found.outputQty = row.outputQty;
+    found.byproducts = (row.byproducts || []).map((item) => ({ ...item }));
     found.bonuses = (row.bonuses || []).map((bonus) => ({ ...bonus }));
     found.heroMods = (row.heroMods || []).map((mod) => ({ ...mod }));
     found.expansion = row.expansion || "";
@@ -125,6 +128,7 @@ function exportLibrary(state) {
         }),
         outputName: recipe.outputName,
         outputQty: recipe.outputQty,
+        byproducts: (recipe.byproducts || []).map((item) => ({ name: item.name, qty: item.qty, chance: item.chance || "" })),
         bonuses: recipe.bonuses || [],
         heroMods: recipe.heroMods || [],
         expansion: recipe.expansion || "",
@@ -160,6 +164,7 @@ function applyLibrary(state, library) {
         }),
         outputName: recipe.outputName,
         outputQty: recipe.outputQty,
+        byproducts: (recipe.byproducts || []).map((item) => ({ name: item.name, qty: item.qty, chance: item.chance || "" })),
         bonuses: recipe.bonuses || [],
         heroMods: recipe.heroMods || [],
         expansion: recipe.expansion || "",

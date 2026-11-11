@@ -279,26 +279,40 @@ const minerText = `原料,产出,精通,耗时,科技点
 ,宝石×1几率 喜鹊之眼 +0.1,,,
 `;
 const miner = parseStationCsv(minerText, "僵尸矿工（需要打通矿场的两条入口）");
-assert.equal(miner.length, 3);
+assert.equal(miner.length, 1);
 assert.equal(miner[0].inputs[0].name, "矿工站");
 assert.equal(miner[0].inputs[0].fixed, true);
 assert.equal(miner[0].outputName, "铁矿石");
-assert.equal(miner[1].outputName, "煤");
-assert.equal(miner[1].outputQty, 2);
-assert.equal(miner[1].inputs[0].fixed, true);
-assert.equal(miner[1].mastery, 1);
-assert.equal(miner[2].outputName, "宝石");
-assert.equal(miner[2].chance, "喜鹊之眼 +0.1");
+assert.equal(miner[0].outputQty, 1);
+assert.equal(miner[0].byproducts[0].name, "煤");
+assert.equal(miner[0].byproducts[0].qty, 2);
+assert.equal(miner[0].byproducts[1].name, "宝石");
+assert.equal(miner[0].byproducts[1].chance, "喜鹊之眼 +0.1");
 const mined = expandTasks({
   items: {},
-  recipes: miner.map((row, index) => ({ ...row, id: "m" + index, enabled: true })),
+  recipes: [{ ...miner[0], id: "miner", enabled: true }],
   stock: {},
   heroOwned: [],
 }, [
   { id: "ore", outputName: "铁矿石", qty: 10, priority: 0, createdAt: 1 },
+  { id: "coal", outputName: "煤", qty: 5, priority: 0, createdAt: 2 },
 ]);
 assert.equal(mined[0].trees[0].batches, 10);
 assert.equal(mined[0].trees[0].children[0].name, "矿工站");
 assert.equal(mined[0].trees[0].children[0].gross, 1);
+assert.equal(mined[1].trees[0].short, 0);
+assert.equal(mined[1].trees[0].children.length, 0);
+
+const baitText = `原料,产出,精通,耗时,科技点
+漆×1,活饵×4,6,4,3
+肉体白色头骨1×1,,,,
+燃料× 25 ( 节能达人 −15 ),,,,
+`;
+const bait = parseStationCsv(baitText, "厨房台面");
+assert.equal(bait.length, 1);
+assert.equal(bait[0].inputs.map((row) => row.name).join(","), "漆,肉体白色头骨1,燃料");
+assert.equal(bait[0].heroMods[0].name, "节能达人");
+assert.equal(bait[0].heroMods[0].amount, -15);
+assert.equal(bait[0].heroMods[0].index, 2);
 
 console.log("calc ok");

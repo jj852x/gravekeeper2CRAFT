@@ -14,6 +14,7 @@ const {
   effectiveOutputQty,
   effectiveInputQty,
   HERO_PERKS,
+  recipeMakes,
 } = calcApi;
 const {
   applyImportedRecipes,
@@ -388,7 +389,7 @@ function onTaskQty(event) {
 }
 
 function enabledRecipe(name) {
-  return state.recipes.some((recipe) => recipe.enabled && recipe.outputName === name);
+  return state.recipes.some((recipe) => recipe.enabled && recipeMakes(recipe, name));
 }
 
 function stepTaskQty(id, delta) {
@@ -693,6 +694,14 @@ function inputLabel(recipe, input, index) {
   return `${escapeHtml(input.name)} × ${qty}`;
 }
 
+function outputLabel(recipe) {
+  const extras = (recipe.byproducts || []).map((item) => {
+    const chance = item.chance ? `<span class="bonus">${escapeHtml(item.chance)}</span>` : "";
+    return `${escapeHtml(item.name)} × ${item.qty}${chance}`;
+  });
+  return [escapeHtml(recipe.outputName), ...extras].join("、");
+}
+
 function yieldLabel(recipe) {
   const qty = effectiveOutputQty(recipe, state.heroOwned);
   const zombieNote = (recipe.bonuses || []).map((bonus) => `${escapeHtml(bonus.name)} ${signedAmount(bonus.amount)}`).join("、");
@@ -712,7 +721,7 @@ function renderRecipes() {
       return title + recipes.map((recipe) => `
         <tr>
           <td>${recipe.inputs.map((input, index) => inputLabel(recipe, input, index)).join("、")}</td>
-          <td>${escapeHtml(recipe.outputName)}${recipe.expansion ? `<span class="bonus">${escapeHtml(recipe.expansion)}</span>` : ""}</td>
+          <td>${outputLabel(recipe)}${recipe.expansion ? `<span class="bonus">${escapeHtml(recipe.expansion)}</span>` : ""}</td>
           <td>${yieldLabel(recipe)}</td>
           <td>${recipe.mastery ?? ""}</td>
           <td>${recipe.time ?? ""}</td>
@@ -769,11 +778,15 @@ function recipeOptions(station, query) {
   const rows = state.recipes.filter((recipe) => {
     if (!recipe.enabled) return false;
     if (station && recipe.station !== station) return false;
-    if (q && !String(recipe.outputName).toLowerCase().includes(q)) return false;
+    const names = [recipe.outputName, ...(recipe.byproducts || []).map((item) => item.name)];
+    if (q && !names.some((name) => String(name).toLowerCase().includes(q))) return false;
     return true;
   });
   if (!rows.length) return `<option value="">没有匹配的配方</option>`;
-  return rows.map((recipe) => `<option value="${recipe.id}">${escapeHtml(recipe.station)} · ${escapeHtml(recipe.outputName)}</option>`).join("");
+  return rows.map((recipe) => {
+    const text = [recipe.outputName, ...(recipe.byproducts || []).map((item) => `${item.name} × ${item.qty}`)].join("、");
+    return `<option value="${recipe.id}">${escapeHtml(recipe.station)} · ${escapeHtml(text)}</option>`;
+  }).join("");
 }
 
 function draftFields() {

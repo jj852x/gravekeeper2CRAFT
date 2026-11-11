@@ -62,8 +62,10 @@ function pushMod(row, mod, side, index) {
   if (kind === "hero") {
     const entry = { name: mod.name, amount: mod.amount, side };
     if (side === "input") entry.index = index;
+    if (!row.heroMods) row.heroMods = [];
     row.heroMods.push(entry);
   } else if (kind === "zombie") {
+    if (!row.bonuses) row.bonuses = [];
     row.bonuses.push({ name: mod.name, amount: mod.amount });
   }
 }
@@ -167,17 +169,12 @@ function parseStationCsv(text, stationName) {
       ? [{ name: chance.name, qty: chance.qty }]
       : parseQtyCell(cells[1] || "");
     if (!inputs.length && outputs.length && previous) {
-      const built = recipeFromCells(
-        stationName,
-        previous.inputs.map((input) => ({ ...input })),
-        outputs,
-        intOrNull(cells[2]) ?? previous.mastery,
-        intOrNull(cells[3]) ?? previous.time,
-      );
-      if (built) {
-        if (chance) built.chance = chance.note;
-        rows.push(built);
-      }
+      if (!previous.byproducts) previous.byproducts = [];
+      previous.byproducts.push({
+        name: outputs[0].name,
+        qty: outputs[0].qty,
+        chance: chance ? chance.note : "",
+      });
       continue;
     }
     if (!outputs.length) {
@@ -276,6 +273,7 @@ function mergeRecipes(recipes, incoming) {
       next.push({
         ...row,
         inputs: row.inputs.map((input) => ({ ...input })),
+        byproducts: (row.byproducts || []).map((item) => ({ ...item })),
         bonuses: row.bonuses ? row.bonuses.map((bonus) => ({ ...bonus })) : undefined,
         heroMods: row.heroMods ? row.heroMods.map((mod) => ({ ...mod })) : undefined,
       });
@@ -284,6 +282,7 @@ function mergeRecipes(recipes, incoming) {
     }
     found.inputs = row.inputs.map((input) => ({ ...input }));
     found.outputQty = row.outputQty;
+    found.byproducts = (row.byproducts || []).map((item) => ({ ...item }));
     found.bonuses = row.bonuses ? row.bonuses.map((bonus) => ({ ...bonus })) : [];
     found.heroMods = row.heroMods ? row.heroMods.map((mod) => ({ ...mod })) : [];
     found.expansion = row.expansion || "";
@@ -299,10 +298,27 @@ function cloneStock(stock) {
   return { ...stock };
 }
 
+function companionOutputs(recipe, requested, owned) {
+  const items = [{ name: recipe.outputName, qty: effectiveOutputQty(recipe, owned) }];
+  for (const extra of recipe.byproducts || []) items.push({ name: extra.name, qty: extra.qty || 1 });
+  return items.filter((item) => item.name && item.name !== requested);
+}
+
 function pickRecipe(state, itemName) {
   return state.recipes
-    .filter((recipe) => recipe.enabled && recipe.outputName === itemName)
+    .filter((recipe) => recipe.enabled && recipeMakes(recipe, itemName))
     .sort((a, b) => String(a.id).localeCompare(String(b.id)))[0] || null;
+}
+
+function recipeMakes(recipe, itemName) {
+  if (recipe.outputName === itemName) return true;
+  return (recipe.byproducts || []).some((item) => item.name === itemName);
+}
+
+function outputQtyOf(recipe, itemName, owned) {
+  if (itemName === recipe.outputName) return effectiveOutputQty(recipe, owned);
+  const extra = (recipe.byproducts || []).find((item) => item.name === itemName);
+  return extra ? extra.qty || 1 : 0;
 }
 
 function expand(state, name, qtyNeeded, forcedRecipe, stock, stack) {
@@ -327,10 +343,13 @@ function expand(state, name, qtyNeeded, forcedRecipe, stock, stack) {
   }
   stack.add(name);
   const owned = state.heroOwned;
-  const yieldQty = effectiveOutputQty(recipe, owned);
+  const yieldQty = outputQtyOf(recipe, name, owned) || 1;
   const batches = Math.ceil(remaining / yieldQty);
   const produced = batches * yieldQty;
   stock[name] = (stock[name] || 0) + (produced - remaining);
+  for (const item of companionOutputs(recipe, name, owned)) {
+    stock[item.name] = (stock[item.name] || 0) + item.qty * batches;
+  }
   const children = recipe.inputs.map((input, index) => {
     const each = effectiveInputQty(recipe, index, owned);
     const need = input.fixed ? each : each * batches;
@@ -441,6 +460,7 @@ GK2Root.GK2Calc = {
   stationFromFilename,
   parseStationCsv,
   recipeKey,
+  recipeMakes,
   mergeRecipes,
   expandTasks,
   flattenTree,
